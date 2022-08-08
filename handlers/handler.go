@@ -21,7 +21,6 @@ type ClientI interface {
 }
 
 type Handler struct {
-	// Put your database clients here.
 	Client ClientI
 	Logger *zap.Logger
 }
@@ -76,8 +75,11 @@ func (h *Handler) getRequest(w http.ResponseWriter, r *http.Request) {
 	// we only want the single item.
 	key := keys[0]
 
+	//Logging
+	h.Logger.Info("GET method called with", zap.String("Url Query key", key))
+
 	resp := RestResponse{
-		Message: "Url Param 'key' is: " + string(key),
+		Message: "Url Query 'key' is: " + string(key),
 	}
 
 	w.Header().Add("Content-Type", "application/json")
@@ -105,5 +107,5 @@ func NewHandler(logger *zap.Logger) Handler {
 }
 
 func (c ClientDB) Greeter(name string) string {
-	return fmt.Sprintf("你好，%s", name)
+	return fmt.Sprintf("Hello, %s", name)
 }
